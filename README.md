@@ -30,17 +30,13 @@ A responsive AI Powered Customer Service Chat Panel Interface inspired by Interc
 ✅ Redux-powered data flow  
 ✅ Responsive textarea with auto-sizing  
 
-## Setup
-1. Clone repository
-```bash
-git clone [your-repo-url]
-Install dependencies
+gh repo clone NitishManral/BeyondChatAssignment
 
-bash
+###Install dependencies
 npm install
-Start development server
 
-bash
+
+###Start development server
 npm run dev
 Limitations
 ⚠️ Mobile Responsiveness
@@ -49,7 +45,6 @@ Mobile view not fully implemented due to demo video focus on desktop interface. 
 Evaluation Notes
 UI/UX Focus: Color schemes and transitions matching demo video
 
-WOW Factors
 
 Animated AI response bubbles
 
