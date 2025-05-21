@@ -1,14 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Star, Send, Bot, X, Square, ArrowUp, ChevronDown, SquarePen } from 'lucide-react';
+import { Star, Send, Bot, X, Square, ArrowUp, ChevronDown,SquarePen } from 'lucide-react';
 import { useDispatch } from 'react-redux';
 
-/**
- * AI assistant configuration with
- * - name, avatar,
- * - initial greeting content,
- * - predefined responses triggered by keywords,
- * - suggestions and typing settings.
- */
 const aiConfig = {
   assistant: {
     name: 'Fin',
@@ -31,68 +24,34 @@ const aiConfig = {
     ],
     suggestions: ['How do I get a refund?'],
     settings: {
-      typingSpeed: 30,    // ms delay per character while typing
-      maxMessages: 20,    // max number of messages to keep in chat
-      responseDelay: 500  // delay before assistant starts responding
+      typingSpeed: 30,
+      maxMessages: 20,
+      responseDelay: 500
     }
   }
 };
 
-/**
- * AICopilot Component
- * @param {boolean} isMobile - Indicates if rendering for mobile
- * @param {boolean} isOpen - Controls visibility on mobile
- * @param {function} onToggle - Toggle callback (used for mobile overlay)
- */
 const AICopilot = ({ isMobile, isOpen, onToggle }) => {
-  // UI state for active tab (copilot or details)
   const [activeTab, setActiveTab] = useState('copilot');
-  // User's current question input
   const [question, setQuestion] = useState('');
-  // Array of chat messages
   const [messages, setMessages] = useState([]);
-  // Typing indicator state
   const [isTyping, setIsTyping] = useState(false);
-  // Response rendering stages: 0 = no response, 1 = typing, 2 = completed
   const [responseStage, setResponseStage] = useState(0);
-  // Current text being typed out (incremental)
   const [currentText, setCurrentText] = useState('');
-  // Current character index for typing animation
   const [charIndex, setCharIndex] = useState(0);
-  // The current response object being displayed
   const [currentResponse, setCurrentResponse] = useState(null);
-
-  // Redux dispatch function to send messages/actions
   const dispatch = useDispatch();
 
   const { assistant } = aiConfig;
   const { typingSpeed, maxMessages, responseDelay } = assistant.settings;
 
-  /**
-   * Dispatch the assistant's message content to redux store.
-   * This could be used to insert the AI response elsewhere (like a composer).
-   * @param {string} content
-   */
-  const handleInsertResponse = (content) => {
-    dispatch({
-      type: 'SET_AI_MESSAGE',  // action type to store AI message in redux
-      payload: content
-    });
-  };
+const handleInsertResponse = (content) => {
+  dispatch({
+    type: 'SET_AI_MESSAGE',  // Changed from SET_AI_RESPONSE
+    payload: content
+  });
+};
 
-  /**
-   * Scroll chat container to the bottom for latest messages.
-   */
-  const scrollToBottom = () => {
-    const chatContainer = document.querySelector('.chat-container');
-    if (chatContainer) {
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-    }
-  };
-
-  /**
-   * Effect to keep messages array within maxMessages limit and scroll down when messages change.
-   */
   useEffect(() => {
     if (messages.length > maxMessages) {
       setMessages(messages.slice(messages.length - maxMessages));
@@ -102,13 +61,15 @@ const AICopilot = ({ isMobile, isOpen, onToggle }) => {
     }
   }, [messages, maxMessages]);
 
-  /**
-   * Effect to animate assistant typing response character-by-character.
-   * When done typing, move to responseStage 2 (completed).
-   */
+  const scrollToBottom = () => {
+    const chatContainer = document.querySelector('.chat-container');
+    if (chatContainer) {
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+  };
+
   useEffect(() => {
     if (responseStage === 1 && charIndex < currentResponse?.content?.length) {
-      // Continue typing next character
       const typingTimer = setTimeout(() => {
         setCurrentText(currentResponse.content.substring(0, charIndex + 1));
         setCharIndex(charIndex + 1);
@@ -117,7 +78,6 @@ const AICopilot = ({ isMobile, isOpen, onToggle }) => {
 
       return () => clearTimeout(typingTimer);
     } else if (responseStage === 1 && charIndex >= currentResponse?.content?.length) {
-      // Typing complete, finalize response display
       const completeTimer = setTimeout(() => {
         setResponseStage(2);
         setIsTyping(false);
@@ -134,15 +94,9 @@ const AICopilot = ({ isMobile, isOpen, onToggle }) => {
     }
   }, [responseStage, charIndex, currentResponse, messages, assistant, responseDelay, typingSpeed]);
 
-  /**
-   * Handle sending user's question.
-   * Finds matching response based on keywords or fallback to unknown answer.
-   * Resets typing animation states.
-   */
   const handleSendMessage = () => {
     if (!question.trim()) return;
 
-    // Find response triggered by a keyword in question (case insensitive)
     const matchedResponse = assistant.responses.find(response =>
       question.toLowerCase().includes(response.trigger)
     ) || {
@@ -151,8 +105,6 @@ const AICopilot = ({ isMobile, isOpen, onToggle }) => {
     };
 
     setCurrentResponse(matchedResponse);
-
-    // Add user's question to chat messages
     const newMessages = [...messages, {
       id: Date.now(),
       sender: 'You',
@@ -167,31 +119,19 @@ const AICopilot = ({ isMobile, isOpen, onToggle }) => {
     setCharIndex(0);
     setTimeout(scrollToBottom, 100);
 
-    // Delay before assistant starts typing response
     setTimeout(() => {
       setResponseStage(1);
       setTimeout(scrollToBottom, 50);
     }, responseDelay);
   };
 
-  /**
-   * Handle clicking on a suggested question.
-   * Auto-fills input and sends immediately.
-   * @param {string} suggestion
-   */
   const handleSuggestedQuestion = (suggestion) => {
     setQuestion(suggestion);
     setTimeout(handleSendMessage, 100);
   };
 
-  // Hide component on mobile if closed
   if (isMobile && !isOpen) return null;
 
-  /**
-   * Renders the assistant's response based on current response stage:
-   * - Stage 1: typing animation
-   * - Stage 2: fully displayed response with sources
-   */
   const renderResponseByStage = () => {
     if (responseStage === 0 || !currentResponse) return null;
 
@@ -220,6 +160,7 @@ const AICopilot = ({ isMobile, isOpen, onToggle }) => {
                 <div className="mt-1 p-4 rounded-lg relative overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-r from-blue-300 via-purple-300 to-blue-300 animate-gradient"></div>
                   <p className="relative z-10">{currentResponse.content}</p>
+
                 </div>
 
                 {currentResponse.sources.length > 0 && (
@@ -237,14 +178,7 @@ const AICopilot = ({ isMobile, isOpen, onToggle }) => {
                         </div>
                       ))}
                     </div>
-                    <button
-                      className="flex items-center text-xs text-blue-600 mt-2"
-                      onClick={() => handleInsertResponse(currentResponse.content)}
-                      aria-label="Insert AI response into composer"
-                    >
-                      <SquarePen className="w-3 h-3 mr-1" />
-                      Insert this response
-                    </button>
+                    <button className="text-sm text-blue-600 mt-1">See all →</button>
                   </div>
                 )}
               </>
@@ -256,144 +190,216 @@ const AICopilot = ({ isMobile, isOpen, onToggle }) => {
   };
 
   return (
-    <div className="relative h-full border-l border-gray-200 bg-white shadow-lg flex flex-col">
+    <>
+      <style jsx="true" global="true">{`
 
-      {/* Mobile overlay for toggling */}
+        @keyframes gradient {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+
+        .animate-gradient {
+          background-size: 200% 200%;
+          animation: gradient 3s ease infinite;
+        }
+
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0; }
+        }
+
+        .animate-pulse {
+          animation: pulse 1s ease-in-out infinite;
+        }
+        
+     .content-gradient {
+            background: linear-gradient(
+              to top,
+              rgba(138, 92, 246, 0.3) 0%,
+              rgba(138, 92, 246, 0.07) 10%,
+              rgba(138, 92, 246, 0.03) 20%,
+              #ffffff 25%,
+              #ffffff 100%
+            );
+            background-size: 100% 100%;
+          }
+      `}</style>
+
       {isMobile && isOpen && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 z-20 lg:hidden"
           onClick={onToggle}
-          aria-label="Close AI Copilot"
         />
       )}
+      <div className={`${isMobile ? 'fixed right-0 top-0 z-30 h-full' : 'relative h-full'} w-80 bg-white border-l border-gray-200 flex flex-col shadow-lg transition-transform duration-300 ${isMobile && !isOpen ? 'translate-x-full' : 'translate-x-0 '} content-gradient`}>
 
-      {/* Header with tabs and close button */}
-      <div className="flex items-center justify-between border-b px-4 py-3">
-        <div className="flex space-x-3">
-          <button
-            onClick={() => setActiveTab('copilot')}
-            className={`py-2 px-3 rounded-md text-sm font-medium transition-colors
-              ${activeTab === 'copilot' ? 'bg-blue-600 text-white' : 'text-gray-600 hover:text-blue-600'}`}
-            aria-selected={activeTab === 'copilot'}
-            aria-label="Open AI Copilot tab"
-          >
-            Copilot
-          </button>
-          <button
-            onClick={() => setActiveTab('details')}
-            className={`py-2 px-3 rounded-md text-sm font-medium transition-colors
-              ${activeTab === 'details' ? 'bg-blue-600 text-white' : 'text-gray-600 hover:text-blue-600'}`}
-            aria-selected={activeTab === 'details'}
-            aria-label="Open Details tab"
-          >
-            Details
-          </button>
-        </div>
-
-        {isMobile && (
-          <button
-            onClick={onToggle}
-            aria-label="Close AI Copilot panel"
-            className="text-gray-600 hover:text-gray-900"
-          >
-            <X className="w-6 h-6" />
-          </button>
-        )}
-      </div>
-
-      {/* Content container */}
-      <div className="flex flex-col flex-grow overflow-hidden">
-        {/* Copilot Tab */}
-        {activeTab === 'copilot' && (
-          <div className="flex flex-col flex-grow p-4 overflow-y-auto chat-container" role="log" aria-live="polite" aria-relevant="additions">
-            {/* Initial greeting message */}
-            {messages.length === 0 && (
-              <div className="mb-6">
-                <div className="flex items-center mb-2">
-                  <div className="w-8 h-8 rounded bg-black flex items-center justify-center text-white font-bold mr-2">⌘</div>
-                  <h2 className="text-lg font-semibold">{assistant.initialContent.greeting}</h2>
-                </div>
-                <p className="text-gray-700">{assistant.initialContent.instruction}</p>
-              </div>
-            )}
-
-            {/* Render existing messages */}
-            {messages.map(({ id, sender, content, avatar, sources }) => (
-              <div key={id} className="flex items-start mb-4 space-x-2">
-                <div className="flex-shrink-0 w-6 h-6 rounded bg-gray-300 flex items-center justify-center text-xs font-semibold">
-                  {avatar || sender[0]}
-                </div>
-                <div>
-                  <p className="text-sm font-medium">{sender}</p>
-                  <p className="text-sm">{content}</p>
-                  {sources && sources.length > 0 && (
-                    <div className="mt-1 text-xs text-gray-500">
-                      Sources: {sources.map(src => src.title).join(', ')}
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))}
-
-            {/* Render the assistant response currently typing or just completed */}
-            {renderResponseByStage()}
-          </div>
-        )}
-
-        {/* Details Tab */}
-        {activeTab === 'details' && (
-          <div className="p-4 text-sm text-gray-700">
-            {/* You can populate details content here */}
-            <p>Details panel content goes here...</p>
-          </div>
-        )}
-
-        {/* User Input */}
-        {activeTab === 'copilot' && (
-          <div className="p-4 border-t flex flex-col space-y-2">
-            {/* Suggested questions buttons */}
-            <div className="flex space-x-2 overflow-x-auto">
-              {assistant.suggestions.map((suggestion, i) => (
-                <button
-                  key={i}
-                  onClick={() => handleSuggestedQuestion(suggestion)}
-                  className="flex items-center bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full px-3 py-1 text-xs whitespace-nowrap"
-                  aria-label={`Suggested question: ${suggestion}`}
-                >
-                  <Star className="w-3 h-3 mr-1" />
-                  {suggestion}
-                </button>
-              ))}
-            </div>
-
-            {/* Question input and send button */}
-            <div className="flex items-center">
-              <input
-                type="text"
-                value={question}
-                onChange={e => setQuestion(e.target.value)}
-                placeholder="Ask AI..."
-                className="flex-grow border border-gray-300 rounded-xl px-4 py-3 pr-12 outline-none focus:ring-2 focus:ring-blue-600 transition"
-                onKeyDown={e => {
-                  if (e.key === 'Enter') {
-                    e.preventDefault();
-                    handleSendMessage();
-                  }
-                }}
-                aria-label="Enter your question"
-              />
+        <div className="border-b border-gray-200">
+          <div className="flex items-center justify-between px-4 py-3">
+            <div className="flex space-x-6">
               <button
-                onClick={handleSendMessage}
-                className="ml-2 p-3 rounded-full bg-blue-600 hover:bg-blue-700 text-white transition"
-                aria-label="Send question"
+                onClick={() => setActiveTab('copilot')}
+                className={`text-sm font-medium pb-3 border-b-2 transition-all flex items-center ${activeTab === 'copilot'
+                  ? 'text-blue-600 border-blue-600'
+                  : 'text-gray-500 border-transparent hover:text-gray-700'
+                  }`}
               >
-                <Send className="w-5 h-5" />
+                <div className="bg-blue-600 text-white w-5 h-5 rounded flex items-center justify-center mr-2">
+                  <Bot className="w-3 h-3" />
+                </div>
+                AI Copilot
+              </button>
+              <button
+                onClick={() => setActiveTab('details')}
+                className={`text-sm font-medium pb-3 border-b-2 transition-all ${activeTab === 'details'
+                  ? 'text-blue-600 border-blue-600'
+                  : 'text-gray-500 border-transparent hover:text-gray-700'
+                  }`}
+              >
+                Details
               </button>
             </div>
+            <button className="p-1">
+              <Square className="w-5 h-5 text-gray-500" />
+            </button>
           </div>
-        )}
+        </div>
+
+        <div className="flex-1 flex flex-col overflow-hidden ">
+          {activeTab === 'copilot' ? (
+            <>
+              <div className="flex-1 overflow-y-auto p-4 chat-container">
+                {messages.length === 0 ? (
+                  <div className="h-full flex flex-col justify-center items-center text-center p-6">
+                    <div className="w-12 h-12 bg-black rounded-lg flex items-center justify-center mb-6">
+                      <span className="text-white text-xl">{assistant.initialContent.icon}</span>
+                    </div>
+                    <h3 className="text-lg font-bold text-gray-900 mb-2">
+                      {assistant.initialContent.greeting}
+                    </h3>
+                    <p className="text-gray-500 text-sm">
+                      {assistant.initialContent.instruction}
+                    </p>
+                  </div>
+                ) : (
+                  <div className="flex flex-col space-y-6">
+                    {messages.map(message => (
+                      <div key={message.id} className="flex flex-col space-y-2">
+                        <div className="flex items-start">
+                          <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center mr-2 flex-shrink-0">
+                            {message.avatar === 'AI' ? (
+                              <div className="w-full h-full rounded bg-black flex items-center justify-center">
+                                <span className="text-white text-xs">AI</span>
+                              </div>
+                            ) : (
+                              <span className="text-xs">👤</span>
+                            )}
+                          </div>
+                          <div className="flex flex-col">
+                            <span className="font-medium">{message.sender}</span>
+                            {message.content && (
+                              message.sender === 'Fin' ? (
+                                <>
+                                  <div className="mt-1 p-4 rounded-lg relative overflow-hidden">
+                                    <div className="absolute inset-0 bg-gradient-to-r from-blue-200 via-purple-200 to-blue-200 animate-gradient"></div>
+                                    <p className="relative z-10">{message.content}
+                                      {message.sender === 'Fin' && (
+                                          <button
+                                            onClick={() => handleInsertResponse(message.content)}
+                                            className="w-full h-[40px] mt-2 flex flex-row justify-center items-center bg-white rounded-md text-sm text-black hover:text-blue-800 "
+                                          >
+
+                                            <span className='w-[90%] flex flex-row items-center justify-center font-bold '>
+                                              <SquarePen className='mr-1'  />
+                                              Add to composer
+                                              </span>
+                                            <ChevronDown className="mr-2" />
+                                          </button>
+                                      )}
+                                    </p>
+                                    
+                                  </div>
+                                  {message.sources && (
+                                    <div className="mt-2">
+                                      <p className="text-xs text-gray-500">{message.sources.length} relevant sources found</p>
+                                      <div className="flex flex-col space-y-1 mt-1">
+                                        {message.sources.map(source => (
+                                          <div key={source.id} className="flex items-center">
+                                            {source.type === 'document' ? (
+                                              <Square className="w-3 h-3 text-black mr-2" />
+                                            ) : (
+                                              <div className="w-3 h-3 bg-blue-600 mr-2"></div>
+                                            )}
+                                            <span className="text-sm">{source.title}</span>
+                                          </div>
+                                        ))}
+                                      </div>
+                                      
+                                      <button className="text-sm text-blue-600 mt-1">See all →</button>
+                                    </div>
+                                  )}
+                                </>
+                              ) : (
+                                <p className="mt-1">{message.content}</p>
+                              )
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                    {isTyping && renderResponseByStage()}
+                  </div>
+                )}
+              </div>
+
+              <div className="p-4 mt-auto shadow-lg input-container">
+                {messages.length === 0 && (
+                  <div className="mb-4">
+                    <div className="space-y-2">
+                      {assistant.suggestions.map((suggestion, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center space-x-2 p-2 rounded hover:bg-gray-50 cursor-pointer"
+                          onClick={() => handleSuggestedQuestion(suggestion)}
+                        >
+                          <Star className="w-4 h-4 text-gray-400" />
+                          <span className="text-sm text-gray-700 font-medium">
+                            {suggestion}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={question}
+                    onChange={(e) => setQuestion(e.target.value)}
+                    placeholder={messages.length === 0 ? "Ask a question..." : "Ask a follow up question..."}
+                    className="w-full border  rounded-xl px-4 py-3 pr-12 outline-none border-transparent transition-all"
+                    onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                  />
+                  <button
+                    className="absolute right-3 top-3 text-gray-400 hover:text-gray-600 transition-colors"
+                    onClick={handleSendMessage}
+                  >
+                    <ArrowUp className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className="flex-1 flex items-center justify-center p-6">
+              <div className="text-center">
+                <p className="text-gray-500 text-sm">Coming Soon...</p>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

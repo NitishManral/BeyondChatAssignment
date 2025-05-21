@@ -96,7 +96,7 @@ const ChatArea = ({ contact, isMobile, onMenuToggle }) => {
       {/* Input area for composing new messages */}
       <div className="bg-white m-4 shadow-2xl rounded-xl p-4 flex flex-col">
         {/* Top bar with dropdown (optional future feature) */}
-        <div className='flex items-start justify-between'>
+        <div className='flex items-start justify-between mb-2'>
           <button className="text-white hover:text-gray-700 transition-colors flex flex-row items-center space-x-2">
             <MessageSquareText fill='black' className="w-5 h-5" />
             <span className="text-sm font-semibold text-black">Chat</span>

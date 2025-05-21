@@ -9,7 +9,7 @@
           id: 1,
           sender: 'contact',
           content: "I bought a product from your store in November as a Christmas gift for a member of my family. However, it turns out they have something very similar already. I was hoping you'd be able to refund me, as it is un-opened.",
-          state: 'unread',
+          state: 'read',
           receivedTime: '2025-05-20T10:30:00Z',
           seenTime: null
         },
@@ -33,7 +33,7 @@
           id: 3,
           sender: 'contact',
           content: 'Hi there, I have a question about my recent order...',
-          state: 'unread',
+          state: 'read',
           receivedTime: '2025-05-20T10:25:00Z',
           seenTime: null
         }
