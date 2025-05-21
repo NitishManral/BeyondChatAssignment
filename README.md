@@ -32,30 +32,23 @@ A responsive AI Powered Customer Service Chat Panel Interface inspired by Interc
 
 gh repo clone NitishManral/BeyondChatAssignment
 
-###Install dependencies
+### Install dependencies
 npm install
 
-
-###Start development server
+### Start development server
 npm run dev
-Limitations
-⚠️ Mobile Responsiveness
+
+## Limitations
+### ⚠️ Mobile Responsiveness
 Mobile view not fully implemented due to demo video focus on desktop interface. Desktop UI has been prioritized per assignment notes.
 
-Evaluation Notes
-UI/UX Focus: Color schemes and transitions matching demo video
+## UI/UX Focus
+- Color schemes and transitions matching demo video
+- Animated AI response bubbles
+- Gradient overlays
+- Interactive message composer
 
-
-Animated AI response bubbles
-
-Gradient overlays
-
-Interactive message composer
-
-Best Practices
-
-Component-driven architecture
-
-Redux state normalization
-
-Clean separation of concerns
+## Best Practices
+- Component-driven architecture
+- Redux state normalization
+- Clean separation of concerns
