@@ -264,8 +264,8 @@ const AICopilot = ({ isMobile, isOpen, onToggle }) => {
           </div>
         </div>
 
-        <div className="flex-1 flex flex-col overflow-hidden h-screen ">
-          {activeTab === 'copilot' ? (
+<div className="flex-1 flex flex-col min-h-0 overflow-hidden h-[calc(100%-60px)]">
+            {activeTab === 'copilot' ? (
             <>
               <div className="flex-1 overflow-y-auto p-4 chat-container">
                 {messages.length === 0 ? (
