@@ -28,11 +28,16 @@ const NavigationSidebar = ({ isMobile, isOpen, onToggle }) => {
 
   // Top section navigation items
   const navItems = [
-    { id: 'kanban', icon: FolderKanban, notificationCount: totalUnread },
+    { id: 'MessageSqure', icon: MessageSquareText, notificationCount: totalUnread },
     { id: 'bookOpen', icon: BookOpenCheck },
     { id: 'send', icon: Send },
   ];
-
+<button
+              onClick={() => setActiveContact(null)}
+              className="p-2 text-gray-600 hover:text-blue-600"
+            >
+              <MessageSquareText className="w-6 h-6" />
+            </button>
   // Bottom section items (shortcuts/utilities)
   const bottomItems = [
     { id: 'zap', icon: Zap },

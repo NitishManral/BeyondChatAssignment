@@ -5,7 +5,7 @@ A React + Redux based AI Copilot chat interface featuring multiple contacts, ind
 ## Live Demo
 
 Explore the app live at:  
-[Yet To Deploy]
+[https://beyond-chat-assignment-r5n4.vercel.app/]
 
 ## Overview
 

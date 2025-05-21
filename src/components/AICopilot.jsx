@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Star, Send, Bot, X, Square, ArrowUp, ChevronDown,SquarePen } from 'lucide-react';
+import { Star, Send, Bot, X, Square, ArrowUp, ChevronDown, SquarePen } from 'lucide-react';
 import { useDispatch } from 'react-redux';
 
 const aiConfig = {
@@ -45,12 +45,12 @@ const AICopilot = ({ isMobile, isOpen, onToggle }) => {
   const { assistant } = aiConfig;
   const { typingSpeed, maxMessages, responseDelay } = assistant.settings;
 
-const handleInsertResponse = (content) => {
-  dispatch({
-    type: 'SET_AI_MESSAGE',  // Changed from SET_AI_RESPONSE
-    payload: content
-  });
-};
+  const handleInsertResponse = (content) => {
+    dispatch({
+      type: 'SET_AI_MESSAGE',  // Changed from SET_AI_RESPONSE
+      payload: content
+    });
+  };
 
   useEffect(() => {
     if (messages.length > maxMessages) {
@@ -232,8 +232,7 @@ const handleInsertResponse = (content) => {
           onClick={onToggle}
         />
       )}
-      <div className={`${isMobile ? 'fixed right-0 top-0 z-30 h-full' : 'relative h-full'} w-80 bg-white border-l border-gray-200 flex flex-col shadow-lg transition-transform duration-300 ${isMobile && !isOpen ? 'translate-x-full' : 'translate-x-0 '} content-gradient`}>
-
+      <div className={`${isMobile ? 'fixed inset-0 z-40 w-full' : 'relative w-80'} transform transition-transform duration-300 ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
         <div className="border-b border-gray-200">
           <div className="flex items-center justify-between px-4 py-3">
             <div className="flex space-x-6">
@@ -265,7 +264,7 @@ const handleInsertResponse = (content) => {
           </div>
         </div>
 
-        <div className="flex-1 flex flex-col overflow-hidden ">
+        <div className="flex-1 flex flex-col overflow-hidden h-screen ">
           {activeTab === 'copilot' ? (
             <>
               <div className="flex-1 overflow-y-auto p-4 chat-container">
@@ -304,20 +303,20 @@ const handleInsertResponse = (content) => {
                                     <div className="absolute inset-0 bg-gradient-to-r from-blue-200 via-purple-200 to-blue-200 animate-gradient"></div>
                                     <p className="relative z-10">{message.content}
                                       {message.sender === 'Fin' && (
-                                          <button
-                                            onClick={() => handleInsertResponse(message.content)}
-                                            className="w-full h-[40px] mt-2 flex flex-row justify-center items-center bg-white rounded-md text-sm text-black hover:text-blue-800 "
-                                          >
+                                        <button
+                                          onClick={() => handleInsertResponse(message.content)}
+                                          className="w-full h-[40px] mt-2 flex flex-row justify-center items-center bg-white rounded-md text-sm text-black hover:text-blue-800 "
+                                        >
 
-                                            <span className='w-[90%] flex flex-row items-center justify-center font-bold '>
-                                              <SquarePen className='mr-1'  />
-                                              Add to composer
-                                              </span>
-                                            <ChevronDown className="mr-2" />
-                                          </button>
+                                          <span className='w-[90%] flex flex-row items-center justify-center font-bold '>
+                                            <SquarePen className='mr-1' />
+                                            Add to composer
+                                          </span>
+                                          <ChevronDown className="mr-2" />
+                                        </button>
                                       )}
                                     </p>
-                                    
+
                                   </div>
                                   {message.sources && (
                                     <div className="mt-2">
@@ -334,7 +333,7 @@ const handleInsertResponse = (content) => {
                                           </div>
                                         ))}
                                       </div>
-                                      
+
                                       <button className="text-sm text-blue-600 mt-1">See all →</button>
                                     </div>
                                   )}
