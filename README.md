@@ -1,59 +1,66 @@
-# AI Copilot Chat Application with Redux
+# BeyondChats Internship Assignment - AI Powered Customer Service Chat Panel Interface
 
-A React + Redux based AI Copilot chat interface featuring multiple contacts, individual inboxes, message metadata, and a centralized user (agent) model. This project uses dummy data for demonstration and simulates multi-contact conversations in an AI-powered assistant environment.
+A responsive AI Powered Customer Service Chat Panel Interface inspired by Intercom's AI-enhanced dashboard, built with React, Redux, Tailwind and modern UI practices.
 
-## Live Demo
-
-Explore the app live at:  
-[https://beyond-chat-assignment-r5n4.vercel.app/]
-
-## Overview
-
-This chat application provides an AI assistant interface with the following capabilities:
-
-- **Multi-contact support:** Each contact has its own unique inbox.
-- **Message models:** Each message includes metadata such as timestamps, sender/receiver info, and read status.
-- **Central user/agent:** A single user (agent) model representing the AI assistant or support agent.
-- **Redux state management:** Centralized store managing contacts, messages, and UI states.
-- **Dummy data:** Preloaded contacts and message history for demo purposes.
-- **Interactive UI:** Includes typing animations, suggested questions, tabbed navigation, and responsive design.
+[Live Demo] [https://beyond-chat-assignment-r5n4.vercel.app/]
 
 ## Features
+- **AI Copilot Interface**  
+  Dynamic chat interface with typing animations and response suggestions
+- **Conversation Management**  
+  Message threading, read/unread statuses, and contact organization
+- **Rich Interaction Design**  
+  Animated gradients, smooth transitions, and contextual actions
+- **Desktop-First UI**  
+  Clean 3-column layout with collapsible sidebars
+- **Smart Components**  
+  Message composer with auto-height adjustment and keyboard shortcuts
 
-- **Contact list sidebar:** Select different contacts to view their individual chat history.
-- **Chat window:** Displays conversation with message bubbles, sender avatars, and timestamps.
-- **Typing animation:** AI assistant replies are animated to simulate typing.
-- **Suggested questions:** Quick-reply buttons based on conversation context.
-- **Redux integration:** State is managed via Redux slices for contacts, messages, and user.
-- **Customizable UI:** Easily extend the design and behavior via components and Redux store.
+## Tech Stack
+- **Frontend**: React + Vite
+- **State Management**: Redux
+- **Icons**: Lucide React
+- **Styling**: Tailwind CSS with custom animations
 
-## Technologies Used
+## Key Implementations
+✅ AI response simulation with configurable typing speed  
+✅ Message state management (read/unread/seen)  
+✅ Animated gradient backgrounds  
+✅ Collapsible navigation panels  
+✅ Redux-powered data flow  
+✅ Responsive textarea with auto-sizing  
 
-- React (functional components + hooks)  
-- Redux Toolkit for state management  
-- Tailwind CSS for styling  
-- JavaScript (ES6+)  
-- Dummy JSON data for contacts and messages
-
-## Getting Started
-
-### Installation
-
-### Clone the repository:
-
+## Setup
+1. Clone repository
 ```bash
-git clone 'Yet to replace'
-cd ai-copilot-redux
-Install dependencies:
+git clone [your-repo-url]
+Install dependencies
 
-
+bash
 npm install
-# or
-yarn install
+Start development server
 
-###Run the development server:
+bash
+npm run dev
+Limitations
+⚠️ Mobile Responsiveness
+Mobile view not fully implemented due to demo video focus on desktop interface. Desktop UI has been prioritized per assignment notes.
 
+Evaluation Notes
+UI/UX Focus: Color schemes and transitions matching demo video
 
-npm start
-# or
-yarn start
+WOW Factors
+
+Animated AI response bubbles
+
+Gradient overlays
+
+Interactive message composer
+
+Best Practices
+
+Component-driven architecture
+
+Redux state normalization
+
+Clean separation of concerns
