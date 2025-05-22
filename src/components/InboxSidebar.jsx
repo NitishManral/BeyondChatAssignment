@@ -48,7 +48,7 @@ const InboxSidebar = ({ activeContact, onContactSelect, isMobile, isOpen, onTogg
         </div>
 
         {/* Bottom action buttons */}
-        <div className="p-3 bg-white border-t border-gray-200">
+        {/* <div className="p-3 bg-white border-t border-gray-200">
           <div className="flex items-center justify-center space-x-4">
             <button className="p-2 hover:bg-gray-100 rounded-lg">
               <AlignJustify size={18} />
@@ -57,7 +57,7 @@ const InboxSidebar = ({ activeContact, onContactSelect, isMobile, isOpen, onTogg
               <WalletCards size={18} />
             </button>
           </div>
-        </div>
+        </div> */}
       </div>
     );
   }
@@ -100,7 +100,7 @@ const InboxSidebar = ({ activeContact, onContactSelect, isMobile, isOpen, onTogg
       </div>
 
       {/* Bottom action buttons */}
-      <div className="p-3 bg-white border-t border-gray-200">
+      {/* <div className="p-3 bg-white border-t border-gray-200">
         <div className="flex items-center justify-center space-x-4">
           <button className="p-2 hover:bg-gray-100 rounded-lg">
             <AlignJustify size={18} />
@@ -109,7 +109,7 @@ const InboxSidebar = ({ activeContact, onContactSelect, isMobile, isOpen, onTogg
             <WalletCards size={18} />
           </button>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
