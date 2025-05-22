@@ -23,6 +23,10 @@ export default function MessagingInterface() {
       if (!mobile) {
         setSidebarOpen(true);
         setCopilotOpen(true);
+      } else {
+        // On mobile, start with sidebar closed
+        setSidebarOpen(false);
+        setCopilotOpen(false);
       }
     };
     handleResize();
@@ -59,23 +63,33 @@ export default function MessagingInterface() {
       {/* Mobile Layout */}
       {isMobile && (
         <>
-          {/* Overlays */}
-          {(sidebarOpen || copilotOpen) && (
-            <div className="fixed inset-0 bg-black/50 z-30" onClick={() => {
-              setSidebarOpen(false);
-              setCopilotOpen(false);
-            }} />
-          )}
+          {/* Mobile Top Navigation Bar */}
+          <div className="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 p-3 flex justify-between items-center z-50">
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="p-2 text-gray-600 hover:text-blue-600"
+            >
+              <Menu className="w-6 h-6" />
+            </button>
+            
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={() => setActiveContact(null)}
+                className="p-2 text-gray-600 hover:text-blue-600"
+              >
+                <MessageSquareText className="w-6 h-6" />
+              </button>
+              <button
+                onClick={() => setCopilotOpen(true)}
+                className="p-2 text-gray-600 hover:text-blue-600"
+              >
+                <Bot className="w-6 h-6" />
+              </button>
+            </div>
+          </div>
 
-          {/* Navigation Sidebar */}
-          <NavigationSidebar
-            isMobile={true}
-            isOpen={sidebarOpen}
-            onToggle={() => setSidebarOpen(!sidebarOpen)}
-          />
-
-          {/* Inbox/Chat Views */}
-          <div className="flex-1">
+          {/* Main Content Area with top padding for fixed nav */}
+          <div className="flex-1 pt-16">
             {!activeContact ? (
               <InboxSidebar
                 isMobile={true}
@@ -93,34 +107,35 @@ export default function MessagingInterface() {
             )}
           </div>
 
-          {/* AI Copilot */}
-          <AICopilot
-            isMobile={true}
-            isOpen={copilotOpen}
-            onToggle={() => setCopilotOpen(!copilotOpen)}
-          />
+          {/* Navigation Sidebar Overlay */}
+          {sidebarOpen && (
+            <>
+              <div 
+                className="fixed inset-0 bg-black/50 z-30" 
+                onClick={() => setSidebarOpen(false)} 
+              />
+              <NavigationSidebar
+                isMobile={true}
+                isOpen={sidebarOpen}
+                onToggle={() => setSidebarOpen(false)}
+              />
+            </>
+          )}
 
-          {/* Bottom Navigation */}
-          <div className="fixed top-0 left-0 right-0 bg-white border-t border-gray-200 p-2 flex justify-between z-50">
-            {/* <button
-              onClick={() => setActiveContact(null)}
-              className="p-2 text-gray-600 hover:text-blue-600"
-            >
-              <MessageSquareText className="w-6 h-6" />
-            </button>
-            <button
-              onClick={() => setCopilotOpen(true)}
-              className="p-2 text-gray-600 hover:text-blue-600"
-            >
-              <Bot className="w-6 h-6" />
-            </button> */}
-            <button
-              onClick={() => setSidebarOpen(true)}
-              className="p-2 text-gray-600 hover:text-blue-600"
-            >
-              <Menu className="w-6 h-6" />
-            </button>
-          </div>
+          {/* AI Copilot Overlay */}
+          {copilotOpen && (
+            <>
+              <div 
+                className="fixed inset-0 bg-black/50 z-30" 
+                onClick={() => setCopilotOpen(false)} 
+              />
+              <AICopilot
+                isMobile={true}
+                isOpen={copilotOpen}
+                onToggle={() => setCopilotOpen(false)}
+              />
+            </>
+          )}
         </>
       )}
     </div>
